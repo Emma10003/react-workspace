@@ -1,20 +1,17 @@
 import {useContext} from "react";
 import {ThemeContext} from "../../Main_Theme";
+import {commonStyles, darkTheme, lightTheme} from "./themeStyles";
 
 const Header = () => {
     const {isDark, toggleTheme} = useContext(ThemeContext);
+    const theme = isDark ? darkTheme : lightTheme
 
     return (
-        <header style={{marginBottom: '30px'}}>
-            <h1>웹사이트</h1>
+        <header style={theme.header.container}>
+            <h1 style={theme.header.title}>웹사이트</h1>
             <button onClick={toggleTheme}
                     style={{
-                        padding:'10px 20px',
-                        cursor: 'pointer',
-                        backgroundColor: isDark ? '#555' : '#ddd',
-                        color: isDark ? '#fff' : '#000',
-                        border: 'none',
-                        borderRadius: '5px'
+                        ...commonStyles.button, ...theme.header.button
                     }}>
                 {isDark ? '라이트 모드' : '다크모드'}
             </button>

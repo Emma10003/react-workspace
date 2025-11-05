@@ -2,6 +2,7 @@ import {createContext, useState} from "react";
 import Header from "./components/R11_Context_Theme/Header";
 import Content from "./components/R11_Context_Theme/Content";
 import Footer from "./components/R11_Context_Theme/Footer";
+import {darkTheme, lightTheme} from "./components/R11_Context_Theme/themeStyles";
 
 // 테마를 위한 Context 생성
 // 한 페이지에서
@@ -20,16 +21,14 @@ const Main_Theme = () => {
         setIsDark(!isDark);  // 현재 상태의 반대로 설정하기
     }
 
+    const theme = isDark ? darkTheme : lightTheme;
+
     return (
         // Context 로 isDark와 toggleTheme 함수를 모든 하위 컴포넌트의
         // 사용하고 싶은 곳에서 사용할 수 있도록 제공하겠다.
         <ThemeContext.Provider value={{isDark, toggleTheme}}>
-            <div style={{
-                minHeight: '100vh',
-                backgroundColor: isDark ? '#222' : '#fff',
-                color: isDark ? '#fff' : '#222',
-                padding: '20px'
-            }}>
+            <div style={theme.main}>
+                {/* isDark ? darkTheme.main : lightTheme.main 처럼 쓸 수도 있음. */}
                 <Header/>
                 <Content/>
                 <Footer/>
