@@ -4,7 +4,11 @@ import Content from "./components/R11_Context_Theme/Content";
 import Footer from "./components/R11_Context_Theme/Footer";
 
 // 테마를 위한 Context 생성
-const ThemeContext = createContext();
+// 한 페이지에서
+// 다수의 const 를 export(내보내기) 처리할 수 있다.
+// export         는 다수로 작성 가능하지만
+// export default 는 1개!!
+export const ThemeContext = createContext();
 
 // 부모 컴포넌트 (전체 최상위 앱)
 const Main_Theme = () => {
@@ -15,7 +19,6 @@ const Main_Theme = () => {
     const toggleTheme = () => {
         setIsDark(!isDark);  // 현재 상태의 반대로 설정하기
     }
-
 
     return (
         // Context 로 isDark와 toggleTheme 함수를 모든 하위 컴포넌트의
