@@ -26,7 +26,7 @@ const GrandChild = () => {
 }
 
 /* 3. 자식 컴포넌트 - Context 를 사용하지 않고,
-      GrandChild를 포함하고 있는 컴포넌트임을 명시하기 위해 작성한 Child 컴포넌트
+      GrandChild를 포함하고 있는 컴포넌트임을 명시하기 위해 작성한 Child 컴포넌트 (여기에선 실제로 하는 일 X)
 */
 const Child = () => {
     return (
