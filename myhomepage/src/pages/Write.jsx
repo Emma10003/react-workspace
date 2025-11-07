@@ -4,7 +4,7 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
 const Write = () => {
-    // react-router-dom 에 존재하는 path 주소 변경 기능 ㅅ ㅏ용
+    // react-router-dom 에 존재하는 path 주소 변경 기능 사용
     const navigate = useNavigate();
     
     // form 데이터 내부 초기값
