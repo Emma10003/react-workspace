@@ -12,8 +12,8 @@ const Main = () => {
             //    하나의 기능을 작성할 경우 {} 생략 가능.
             //    .then(res => res.data) : 다른 기능을 할 필요을 못 느껴서 {} 없이 작성한 것!
             .then(res => {
-                console.log(res.data);  // System.out.print 처럼 데이터 확인
                 setBoards(res.data);    // 확인된 데이터 배열에 넣어주기
+                console.log(res.data);  // System.out.print 처럼 데이터 확인
             })
             .catch(err => {
                 alert("데이터를 백엔드에서 가져올 수 없습니다.")
@@ -35,7 +35,7 @@ const Main = () => {
     return (
         <div className="page-container">
             <h1>메인 페이지</h1>
-            <p><strong>오늘 날짜 인기글 목록</strong></p>
+            <p>{회사가원하는형식의날짜표현} 인기글 목록</p>
             {/* 7단계: 여기에 axios로 /api/board/popular를 호출하는 로직 추가 */}
             <ul>
                 {/* html 내부에서 {}는 JavaScript에서 선언한 변수명, 상수명, 기능 구현 작성. */}
