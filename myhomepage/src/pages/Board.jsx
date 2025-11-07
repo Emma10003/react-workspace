@@ -64,13 +64,17 @@ const Board = () => {
                     viewCount: 0
                     writer: "user1"
                 */}
+                {/*
+                    1. 제목 클릭해도 게시물에 들어가도록 설정
+                    2. 에러 해결
+                */}
                 {boards.map((b) => (
-                    <tr>
-                        <th onClick={() => handleIdClick(b.id)}>{b.id}</th>
-                        <th>{b.title}</th>
-                        <th>{b.writer}</th>
-                        <th>{b.viewCount}</th>
-                        <th>{b.createdAt}</th> {/* 2025-11-07 11:53:11 -> 2025-11-07 */}
+                    <tr key={b.id} onClick={() => handleIdClick(b.id)}>
+                        <td>{b.id}</td>
+                        <td>{b.title}</td>
+                        <td>{b.writer}</td>
+                        <td>{b.viewCount}</td>
+                        <td>{b.createdAt}</td> {/* 2025-11-07 11:53:11 -> 2025-11-07 */}
                     </tr>
                 ))}
                 </tbody>

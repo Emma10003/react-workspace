@@ -5,7 +5,8 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Mypage from "./pages/Mypage";
 import Write from "./pages/Write";
-import "./App.css";  // 단순히 가져와서 적용할 때는 from 생략 
+import "./App.css";
+import BoardDetail from "./pages/BoardDetail";  // 단순히 가져와서 적용할 때는 from 생략
 
 function App() {
 
@@ -26,10 +27,12 @@ function App() {
             <Routes>
                 <Route path="/" element={<Main />} />
                 <Route path="/board" element={<Board />} />
+                <Route path="/board/:id" element={<BoardDetail />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/mypage" element={<Mypage/>} />
                 <Route path="/write" element={<Write/>} />
+
             </Routes>
         </div>
     );
