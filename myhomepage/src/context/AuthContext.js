@@ -46,7 +46,7 @@ const AuthProvider = ({children}) => {
                     message: "로그인 중 오류가 발생했습니다."
                 };
             });
-
+    };
         // Context에 제공할 값들
         const value = {
             user,                       // 현재 로그인한 사용자 정보
@@ -59,7 +59,7 @@ const AuthProvider = ({children}) => {
                 {children}
             </AuthContext.Provider>
         )
-    }
+
 }
 
 export default AuthProvider;
