@@ -6,9 +6,14 @@ import Login from "./pages/Login";
 import Mypage from "./pages/Mypage";
 import Write from "./pages/Write";
 import "./App.css";
-import BoardDetail from "./pages/BoardDetail";  // 단순히 가져와서 적용할 때는 from 생략
+import BoardDetail from "./pages/BoardDetail";
+import {useAuth} from "./context/AuthContext";  // 단순히 가져와서 적용할 때는 from 생략
 
 function App() {
+
+    // AuthContext 에서 만든 컴포넌트
+    // 변수명 형태의 데이터만 가져와서 사용하기 -> {} 표기.
+    const {user, isAuthenticated} = useAuth();
 
     return (
         <div className="App">
@@ -18,7 +23,18 @@ function App() {
                 <div className="nav-links">
                     <NavLink to="/">메인</NavLink>
                     <NavLink to="/board">게시판</NavLink>
-                    <NavLink to="/write">글쓰기</NavLink>
+
+                    {/* 로그인 상태에 따라 다른 메뉴 표시 */}
+                    {isAuthenticated ? /* return 이 생략된 형태 */(
+                        <>
+                            <NavLink to="/write">글쓰기</NavLink>
+                            <NavLink to="/mypage">마이페이지</NavLink>
+                            <span className="user-email">{user?.memberEmail}</span>
+                        </>
+                    ): (
+                        <NavLink to="/login">로그인</NavLink>
+                    )}
+
                 </div>
 
             </nav>

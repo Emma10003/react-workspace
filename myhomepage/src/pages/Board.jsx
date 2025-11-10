@@ -18,7 +18,7 @@ const Board = () => {
                 console.log("boards: ", boards);  // res.data 백엔드에서 가져온 데이터를 boards 에 넣어주기 전 이므로,
                                                   // 데이터 length가 0인 상태가 맞음
                 console.log("백엔드에서 가져온 데이터: ", res.data)
-                console.log("빅엔드에서 가온 데이터를 boards에 저장: ", setBoards(res.data))
+                console.log("백엔드에서 가져온 데이터를 boards에 저장: ", setBoards(res.data))
                 setBoards(res.data);  // boards 변수명에 데이터 저장기능 실행
                 console.log("setBoard 이후 boards: ", boards);
             })
