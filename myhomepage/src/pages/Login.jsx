@@ -79,7 +79,7 @@ const LoginHandleChangeVersion= () => {
 
 const Login = () => {
     const navigate = useNavigate();
-    const {loginFn} = useAuth();s  // 변수명 뿐만 아니라 기능 명칭 또한 중괄호{} 형태로 가져와서 사용.
+    const {loginFn} = useAuth();  // 변수명 뿐만 아니라 기능 명칭 또한 중괄호{} 형태로 가져와서 사용.
     const [memberEmail, setMemberEmail] = useState('');
     const [memberPassword, setMemberPassword] = useState('');
     const [message, setMessage] = useState('');
