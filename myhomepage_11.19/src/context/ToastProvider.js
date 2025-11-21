@@ -49,13 +49,19 @@ const ToastProvider = ({children}) => {
                     read:false
                 }
 
+                console.log("📍 newNotification: ", newNotification);
+
                 // 알림 추가
                 setNotifications(p => [...p, newNotification]);
 
                 // 5초 후 자동 삭제
+                /*
                 setTimeout(() => {
                     removeNotification(newNotification.id);
                 }, 5000);
+                */
+
+
             });
         };
 

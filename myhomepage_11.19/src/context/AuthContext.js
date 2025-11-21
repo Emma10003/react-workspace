@@ -41,7 +41,7 @@ const AuthProvider = ({children}) => {
                 setUser(res.data.user);
             })
             .catch(err => {
-                console.log("로그인 상태 확인 오류 : ",err);
+                // console.log("로그인 상태 확인 오류 : ",err);
                 setUser(null);
             })
             .finally(() => setLoading(false))
@@ -53,8 +53,8 @@ const AuthProvider = ({children}) => {
             {withCredentials:true})
             .then(
                 res => {
-                    console.log("res.data      : " + res.data);
-                    console.log("res.data.user : " + res.data.user);
+                    // console.log("res.data      : " + res.data);
+                    // console.log("res.data.user : " + res.data.user);
                     // 2. 요청성공(200 ~ 299)
                     // 서버가 응답을 성공적으로 보냈을 때 실행
                     //setUser(res.data); //로그인 성공 시 사용자에 대한 모든 정보 저장
@@ -74,7 +74,7 @@ const AuthProvider = ({children}) => {
 
                 })
             .catch( err => {
-                console.error("로그인 에러 : ", err);
+                // console.error("로그인 에러 : ", err);
                 return {
                     success : false,
                     message : '로그인 중 오류가 발생했습니다.'
@@ -86,12 +86,12 @@ const AuthProvider = ({children}) => {
         return axios.post(API_AUTH_URL+'/logout',
             {},{withCredentials:true}            )
             .then(res => {
-                console.log("로그아웃 응답 : ", res.data);
+                // console.log("로그아웃 응답 : ", res.data);
                 setUser(null); // 사용자 정보 초기화
                 return { success : true };
             })
             .catch(err => {
-                console.error("로그아웃 에러 : ", err);
+                // console.error("로그아웃 에러 : ", err);
                 return {success: false};
             });
     }
