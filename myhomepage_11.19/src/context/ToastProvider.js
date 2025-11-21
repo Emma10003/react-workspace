@@ -14,6 +14,22 @@ const ToastProvider = ({children}) => {
     const [notifications, setNotifications] = useState([]);
     const [stompClient, setStompClient] = useState(null);
 
+    // 알림 삭제 함수
+    const removeNotification =  (id) => {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+    }
+
+    // 알림 읽음 처리
+    const markAsRead = (id) => {
+        setNotifications(prev => prev.map(n => n.id === id ? {...n, read:true} : n));
+    }
+
+    // 모든 알림 삭제
+    const clearAll = () => {
+        setNotifications([]);
+    }
+
+
     useEffect(() => {
         // 웹 소켓 연결 설정
         const socket = new SockJS("http://localhost:8085/ws");
@@ -21,6 +37,29 @@ const ToastProvider = ({children}) => {
             webSocketFactory: () => socket,
             reconnectDelay: 5000,  // 5초동안 기다림
         });
+        client.onConnect = () => {
+            console.log("✅ 웹소켓 연결 성공");
+            client.subscribe("/topic/notifications", (msg) => {
+                const n = JSON.parse(msg.body);
+                console.log("🔔 받은 알림: ", n);
+
+                const newNotification = {
+                    id: Date.now(),
+                    ...n,
+                    read:false
+                }
+
+                // 알림 추가
+                setNotifications(p => [...p, newNotification]);
+
+                // 5초 후 자동 삭제
+                setTimeout(() => {
+                    removeNotification(newNotification.id);
+                }, 5000);
+            });
+        };
+
+/*
         client.onConnect = () => {
             console.log("✅ 웹소켓 연결 성공");
             client.subscribe("/topic/notifications", (msg) => {
@@ -35,6 +74,7 @@ const ToastProvider = ({children}) => {
                 }]);
             });
         };
+*/
 
         client.onStompError = () => {
             alert("연결 실패");
@@ -48,7 +88,10 @@ const ToastProvider = ({children}) => {
     }, [])
 
     const value = {
-        notifications
+        notifications,
+        removeNotification,
+        markAsRead,
+        clearAll
     }
 
     return (
