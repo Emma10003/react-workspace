@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {fetchAllProducts, goToPage, pageClickHandler} from "../context/scripts";
 
 
 const Products = () => {
@@ -15,6 +16,7 @@ const Products = () => {
 
     useEffect(() => {
         fetchProduct();
+        fetchAllProducts()
     }, []);
 
     useEffect(() => {
@@ -50,8 +52,13 @@ const Products = () => {
         filterProducts();
     }
 
+/*
     const handleProductClick = (id) => {
         navigate(`/product/${id}`);
+    }
+*/
+    const handleProductClick = (id) => {
+        goToPage(navigate, `/product/${id}`);
     }
 
     const formatPrice = (price) => {
@@ -74,7 +81,7 @@ const Products = () => {
             <div className="product-header">
                 <h2>상품 목록</h2>
                 <button className="btn-add-product"
-                        onClick={() => navigate("/product/upload")}>
+                        onClick={() => goToPage(navigate, "/product/upload")}>
                     + 상품 등록
                 </button>
             </div>

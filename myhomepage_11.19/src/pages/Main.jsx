@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {fetchAllProducts} from "../context/scripts";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -29,20 +30,8 @@ const Main = () => {
 
     useEffect(() => {
         fetchBoards();
-        fetchProduct();
+        fetchAllProducts(axios, setProducts);
     }, [])
-
-    const fetchProduct = async  () => {
-        try {
-            const r = await axios.get("http://localhost:8085/api/product/all");
-            console.log("r.data: ", r.data);
-            setProducts(r.data);
-        } catch(err) {
-            alert("데이터를 백엔드에서 가져올 수 없습니다.")
-        } finally {
-            setLoading(false);
-        }
-    }
 
     const fetchBoards = async  () => {
         try {
