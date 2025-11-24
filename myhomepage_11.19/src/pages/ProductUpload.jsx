@@ -39,25 +39,26 @@ const ProductUpload = () => {
     };
 
     // 폼 유효성 검사
-    const validateForm = () => {
-        const newErrors = {};
-        if(!product.productName.trim()) {
-            newErrors.productName = "상품명을 입력하세요.";
-        }
-    }
+    // const validateForm = () => {
+    //     const newErrors = {};
+    //     if(!product.productName.trim()) {
+    //         newErrors.productName = "상품명을 입력하세요.";
+    //     }
+    // }
 
     // 폼 제출 핸들러
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(!validateForm()) {
-            return;
-        }
+        // if(!validateForm()) {
+        //     return;
+        // }
         setLoading(true);
 
         // 백엔드 연결 시도
         try {
             const r = await axios.post(
+                /* 'http://localhost:8085/api/product */
                 '/api/product', product
             );
             if(r.data.success) {
