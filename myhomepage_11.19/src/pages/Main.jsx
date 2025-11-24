@@ -29,10 +29,10 @@ const Main = () => {
 
     useEffect(() => {
         fetchBoards();
-        fetchProducts();
+        fetchProduct();
     }, [])
 
-    const fetchProducts = async  () => {
+    const fetchProduct = async  () => {
         try {
             const r = await axios.get("http://localhost:8085/api/product/all");
             console.log("r.data: ", r.data);
@@ -125,7 +125,7 @@ const Main = () => {
                         ))}
                     </ul>
                 ): (
-                    <p className="no-data">인기글이 없습니다.</p>
+                    <p className="no-data">제품이 없습니다.</p>
                 )}
             </section>
             <section className="main-section">
