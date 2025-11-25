@@ -7,7 +7,8 @@ import {fetchAllProducts, goToPage, pageClickHandler} from "../context/scripts";
 const Products = () => {
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
-    const [filter, setFilterProduct] = useState(null);
+    // filterProduct 초기값 : null -> [] 변경
+    const [filterProduct, setFilterProduct] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectCategory, setSelectCategory] = useState('전체');
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -15,25 +16,14 @@ const Products = () => {
     const categories = ["전체", "전자기기", "의류", "식품", "도서", "생활용품", "기타"];
 
     useEffect(() => {
-        fetchProduct();
-        fetchAllProducts()
+        // 현재는 setFilterProduct 로 상품 조회하지만, setProducts 로 변경해야 함.
+        fetchAllProducts(axios, setFilterProduct)
+        // fetchAllProducts(axios, setProducts);
     }, []);
 
     useEffect(() => {
         filterProducts();
     }, [selectCategory, searchKeyword, products]);
-
-    const fetchProduct = async () => {
-        try {
-            const res = await axios.get("http://localhost:8085/api/product/all");
-            setProducts(res.data);
-            setFilterProduct(res.data);
-        } catch (error) {
-            alert("상품 목록을 불러올 수 없습니다.");
-        } finally {
-            setLoading(false);
-        }
-    }
 
     const filterProducts = async () => {
         // products 를 spread 이용해서 배열 복제
@@ -63,17 +53,6 @@ const Products = () => {
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat("ko-KR").format(price);
-    }
-    
-    if(loading) {
-        return (
-            <div className="page-container">
-                <div className="loading-container">
-                    <div className="loading-spinner"></div>
-                    <p>로딩 중...</p>
-                </div>
-            </div>
-        )
     }
 
     return (

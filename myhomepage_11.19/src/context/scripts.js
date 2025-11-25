@@ -75,6 +75,15 @@ export const goBack = (navigate, confirmMessage = null) => {
 }
 
 // ==================[ API 데이터 페칭 관련 함수 ]==================
+/*
+const API_URL 의 경우 내부에서만 사용할 수 있도록 설정된 상태
+외부에서 사용 가능한 형태로 변경하길 원한다면
+export const API_URL 로 export 를 추가하면 된다.
+
+export const API_URLS 의 경우 외부/내부 어디서든 활용 가능하도록 설정한 것.
+내부에서만 사용 가능한 형태로 변경하길 원한다면
+export 를 제거한다.
+ */
 const API_URL = 'http://localhost:8085'
 export const API_URLS = {
     AUTH : `${API_URL}/api/auth`,
@@ -118,11 +127,11 @@ export const fetchAllProducts = async (axios, setProducts, setLoading=null) => {
 
 export const fetchProductDetail = async (axios, id, setProduct, navigate, setLoading=null) => {
     try{
-        const res = await axios.get(`${API_URLS.PRODUCT}/${id}`, {});
+        const res = await axios .get(`${API_URLS.PRODUCT}/${id}`, {});
         setProduct(res.data);
     } catch(error) {
         alert("상품 정보를 불러올 수 없습니다.");
-        navigate("/products");  // App.js 에서 Route 내부에 작성한 프론트엔드 게시물 전체 보는 경로로 보냄
+        navigate("/products");
     } finally {
         if(setLoading) setLoading(false);
     }
@@ -140,8 +149,12 @@ export const fetchBoardDetail = async (axios, id, setBoard, navigate, setLoading
     }
 }
 
-// 날짜 포맷팅
+// ==================[ 날짜 포맷팅 관련 함수 ]==================
 
-// 가격 포맷팅
+
+// ==================[ 가격 포맷팅 관련 함수 ]==================
+export const formatPrice = (price) => {
+    return new Intl.NumberFormat("ko-KR").format(price);
+}
 
 // 카테고리

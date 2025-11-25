@@ -2,6 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {fetchBoardDetail, renderLoading} from "../context/scripts";
+import {render} from  "@testing-library/react";
 
 const BoardDetail = () => {
     const {id} = useParams(); //URL 에서 id 가져오기
@@ -14,9 +15,7 @@ const BoardDetail = () => {
     }, [id]);
 
     // 로딩중 일 때
-    if(loading) {
-        return renderLoading("게시물을 불러오는 중");
-    }
+    if(loading) return renderLoading("게시물을 불러오는 중");
     if(!board) renderLoading("게시물을 찾을 수 없습니다.");
 
     return (

@@ -71,19 +71,7 @@ const Main = () => {
     // 상품 클릭
     const handleProductClick = (productId) => {
         // 코드 작성
-        navigate(`/products/${productId}`);
-    }
-
-    if(loading) {
-        return (
-            <div className="page-container">
-                <div className="loading-container">
-                    <div className="loading-spinner">
-                        {/*<p>로딩 중 ...</p>*/}
-                    </div>
-                </div>
-            </div>
-        );
+        navigate(`/product/${productId}`);
     }
 
     return(
