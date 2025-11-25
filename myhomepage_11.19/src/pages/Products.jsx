@@ -1,9 +1,9 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {fetchAllProducts, goToPage, pageClickHandler} from "../context/scripts";
+import {fetchAllProducts, formatPrice, goToPage, renderNoData} from "../context/scripts";
 
-
+// ctrl + alt + L  :  코드 정렬 단축키
 const Products = () => {
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
@@ -17,7 +17,7 @@ const Products = () => {
 
     useEffect(() => {
         // 현재는 setFilterProduct 로 상품 조회하지만, setProducts 로 변경해야 함.
-        fetchAllProducts(axios, setFilterProduct)
+        fetchAllProducts(axios, setFilterProduct);
         // fetchAllProducts(axios, setProducts);
     }, []);
 
@@ -42,17 +42,13 @@ const Products = () => {
         filterProducts();
     }
 
-/*
-    const handleProductClick = (id) => {
-        navigate(`/product/${id}`);
-    }
-*/
+    /*
+        const handleProductClick = (id) => {
+            navigate(`/product/${id}`);
+        }
+    */
     const handleProductClick = (id) => {
         goToPage(navigate, `/product/${id}`);
-    }
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat("ko-KR").format(price);
     }
 
     return (
@@ -60,7 +56,7 @@ const Products = () => {
             <div className="product-header">
                 <h2>상품 목록</h2>
                 <button className="btn-add-product"
-                        onClick={() => goToPage(navigate, "/product/upload")}>
+                        onClick={() => navigate("/product/upload")}>
                     + 상품 등록
                 </button>
             </div>
@@ -69,13 +65,13 @@ const Products = () => {
             <div className="category-filter">
                 {categories.map((c) => (
                     <button key={c}
-                            className={`category-btn ${selectCategory} === c ? "active" : ""`}
+                            className={`category-btn ${selectCategory} === c ? "active" : ""}`}
                             onClick={() => setSelectCategory(c)}>
                         {c}
                     </button>
                 ))}
             </div>
-            
+
             {/* 검색 박스 */}
             <form className="search-box" onSubmit={handleSearch}>
                 <input type="text"
@@ -85,26 +81,26 @@ const Products = () => {
                 />
                 <button>검색</button>
             </form>
-            
+
             {/* 상품 개수 */}
             <div className="product-count">
-                총 <strong>{filterProducts.length}</strong>개의 상품
+                총 <strong>{filterProduct.length}</strong>개의 상품
             </div>
 
             {/* 상품 목록 */}
-            {filterProducts.length > 0 ? (
+            {filterProduct.length > 0 ? (
                 <div className="product-grid">
-                    {filterProducts.map((product) => (
+                    {filterProduct.map((product) => (
                         <div key={product.id}
                              className="product-card"
                              onClick={() => handleProductClick(product.id)}>
                             <div className="product-image">
                                 {product.imageUrl
                                     ? (
-                                    <img src={product.imageUrl} alt={product.productName}/>
-                                ) : (
-                                    <img src="/static/img/default.png" alt="default"/>
-                                )}
+                                        <img src={product.imageUrl} alt={product.productName}/>
+                                    ) : (
+                                        <img src="/static/img/default.png" alt="default"/>
+                                    )}
                             </div>
                             <div className="product-info">
                                 <span className="product-category">{product.category}</span>
@@ -121,18 +117,21 @@ const Products = () => {
                                     <span className="product-price">
                                         {formatPrice(product.price)}원
                                     </span>
-                                    <span className={`product-stock ${product.stock < 10 ? "매진임박" : ""}`}/>
+                                    <span className={`product-stock ${product.stockQuantity < 10 ? "매진임박" : ""}`}/>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
-                ) : (
-                    <div className="no-products">
-                        <p>등록된 상품이 없습니다.</p>
-                    </div>
-                    )}
-                </div>
+            ) : renderNoData("상품이 존재하지 않습니다.")
+            }
+            {/*
+            중괄호{} 자체가 js 기능들을 모두 쓴다는 표기.
+            {} 내부에 ui 를 작성할 경우에 return()을 생략한 ()가 필요한 것.
+            renderNoData() 에서 이미 소괄호() 형태로 ui를 작성했기 때문에
+            굳이 한 번 더 ()를 작성해서 renderNoData()를 작성할 필요가 없다.
+            */}
+        </div>
     );
 };
 

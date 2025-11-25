@@ -1,8 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {fetchProductDetail, renderLoading} from "../context/scripts";
-
+import {deleteProduct, fetchProductDetail, formatDate, formatPrice, renderLoading} from "../context/scripts";
 
 const ProductDetail = () => {
     const {id} = useParams(); //URL 에서 id 가져오기
@@ -14,15 +13,13 @@ const ProductDetail = () => {
         fetchProductDetail(axios, id, setProduct, navigate, setLoading);
     }, [id]);  // id 값이 조회될 때 마다 상품 상세보기 데이터 조회
 
-    const formatDate = (dateString) => {
-        if(!dateString) return '-';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            date: 'numeric'
-        });
-    }
+    // 삭제 버튼에 직접적으로 기능을 작성할 수 있지만
+    // ui 와 js 환경을 구분하기 위하여 handleDelete 라는 기능명칭으로 삭제 상태관리를 진행한다.
+    const handleDelete = async () => {
+        if(window.confirm("정말 삭제하시겠습니까?")) {
+            await deleteProduct(axios, id, navigate);
+        }
+    };
 
     if(loading) return renderLoading("게시물을 불러오는 중");
 
@@ -51,7 +48,12 @@ const ProductDetail = () => {
                 <h2 className="product-detail-name">
                     {product.productName}
                 </h2>
-                
+
+                <div className="product-detail-price">
+                    <span className="price-label">판매가</span>
+                    <span className="price-value">{formatPrice(product.price)} 원</span>
+                </div>
+
                 <div className="product-detail-meta">
                     <div className="meta-item">
                         <span className="meta-label">상품코드</span>
@@ -66,15 +68,26 @@ const ProductDetail = () => {
                     <div className="meta-item">
                         <span className="meta-label">재고</span>
                         <span className={`meta-value ${product.stockQuantity < 10 ? 'low-stock' : ''}`}>
-                            {product.stockQuantity < 10 ? '매진 임박' : product.stockQuantity} 개
+                            {product.stockQuantity < 10 ? '매진 임박' : `${product.stockQuantity} 개`}
+                            {/* product.stockQuantity + '개' 로 표현 가능 */}
                         </span>
                     </div>
 
                     <div className="meta-item">
                         <span className="meta-label">판매상태</span>
                         <span className="meta-value">
-                            {/* mysql 에서는 boolean 데이터로 가능, oracle 은 char 로 변경한 것 확인하기 */}
-                            {product.isActive ? '판매중' : '판매중지'}
+                            {/*
+                            product.isActive: Y
+                            mysql 에서는 boolean 데이터로 가능, oracle 은 char 로 변경한 것 확인하기
+                            {product.isActive ? '판매중' : '판매중지'} 상태는
+                            product.isActive 의 값이 존재하는지 여부만 확인하는 것으로,
+                            값이 'N'이어도 판매중으로 표기됨.
+
+                            {product.isActive ? '판매중' : '판매중지'} 데이터가 'Y'가 맞을 경우에만
+                            판매중으로 표기할 것!
+                             */}
+                            {console.log("product.isActive: " + product.isActive)}
+                            {product.isActive === 'Y' ? '판매중' : '판매중지'}
                         </span>
                     </div>
 
@@ -111,12 +124,19 @@ const ProductDetail = () => {
                         수정
                     </button>
                     <button className="btn-delete"
-                            onClick={ () => {
-                        if(window.confirm("정말 삭제하시겠습니까?")) {
-                            alert("삭제 기능은 구현 예정입니다. 삭제 불가능합니다.");}
-                        }}>
+                            onClick={handleDelete}>
                         삭제
                     </button>
+                    {/*
+                    삭제 기능을 직접적으로 작성한 예제
+                    <button className="btn-delete"
+                            onClick={() => {
+                                if(window.confirm("정말 삭제하시겠습니까?")) {
+                                    deleteProduct(axios, id, navigate);
+                                }}}>
+                        삭제
+                    </button>
+                    */}
                 </div>
             </div>
         </div>

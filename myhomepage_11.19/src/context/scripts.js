@@ -92,10 +92,44 @@ export const API_URLS = {
     EMAIL : `${API_URL}/api/email`
 }
 
-export const fetchAllBoards = async (axios, setBoard, setLoading=null) => {
+export const fetchAllProducts = async (axios, setProducts, setLoading=null) => {
+    try{
+        const res = await axios.get(`${API_URLS.PRODUCT}/all`, {});
+        setProducts(res.data);
+    } catch(error) {
+        alert("데이터를 가져올 수 없습니다.");
+    } finally {
+        if(setLoading) setLoading(false);
+    }
+}
+
+export const fetchProductDetail = async (axios, id, setProduct, navigate, setLoading=null) => {
+    try{
+        const res = await axios.get(`${API_URLS.PRODUCT}/${id}`, {});
+        setProduct(res.data);
+    } catch(error) {
+        alert("상품 정보를 불러올 수 없습니다.");
+        navigate("/products");
+    } finally {
+        if(setLoading) setLoading(false);
+    }
+}
+
+// 상품 비활성화
+export const deleteProduct = async (axios, id, navigate) => {
+    try{
+        const res = await axios.delete(`${API_URLS.PRODUCT}/${id}`);
+        alert("상품이 삭제되었습니다.");
+        navigate("/products");
+    } catch(error) {
+        alert("상품 삭제에 실패했습니다.");
+    }
+}
+
+export const fetchAllBoards = async (axios, setBoards, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.BOARD}/all`, {});
-        setBoard(res.data);
+        setBoards(res.data);
     } catch(error) {
         alert("데이터를 가져올 수 없습니다.");
     } finally {
@@ -114,43 +148,39 @@ export const fetchAllPopularBoards = async (axios, setBoard, limit=6, setLoading
     }
 }
 
-export const fetchAllProducts = async (axios, setProducts, setLoading=null) => {
-    try{
-        const res = await axios.get(`${API_URLS.PRODUCT}/all`, {});
-        setProducts(res.data);
-    } catch(error) {
-        alert("데이터를 가져올 수 없습니다.");
-    } finally {
-        if(setLoading) setLoading(false);
-    }
-}
-
-export const fetchProductDetail = async (axios, id, setProduct, navigate, setLoading=null) => {
-    try{
-        const res = await axios .get(`${API_URLS.PRODUCT}/${id}`, {});
-        setProduct(res.data);
-    } catch(error) {
-        alert("상품 정보를 불러올 수 없습니다.");
-        navigate("/products");
-    } finally {
-        if(setLoading) setLoading(false);
-    }
-}
-
 export const fetchBoardDetail = async (axios, id, setBoard, navigate, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.BOARD}/${id}`, {});
         setBoard(res.data);
     } catch(error) {
         alert("게시물 정보를 불러올 수 없습니다.");
-        navigate("/products");
+        navigate("/board");
     } finally {
         if(setLoading) setLoading(false);
     }
 }
 
-// ==================[ 날짜 포맷팅 관련 함수 ]==================
+export const boardSave = async (axios, navigate, formData) => {
+    try{
+        const res = await axios.post(`${API_URLS.BOARD}`, formData);
+        alert("글이 작성되었습니다.");
+        navigate("/board");
+    } catch (error) {
+        alert("게시글 작성 페이지에 접근이 불가합니다.");
+        navigate("/board");
+    }
+}
 
+// ==================[ 날짜 포맷팅 관련 함수 ]==================
+export const formatDate = (dateString) => {
+    if(!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        date: 'numeric'
+    })
+}
 
 // ==================[ 가격 포맷팅 관련 함수 ]==================
 export const formatPrice = (price) => {

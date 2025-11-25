@@ -1,30 +1,34 @@
 // 글쓰기
-import {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import {boardSave} from "../context/scripts";
+import {useAuth} from "../context/AuthContext";
 
-/**
- * 과제 : 게시물 작성 시, 작성자를 로그인한 유저 이름을 가 져오고 변경 불가능하게 설정
+/*
+ 과제 1 : 게시물 작성 시, 작성자를 로그인한 유저 이름을 가 져오고 변경 불가능하게 설정 <p> 태그 활용
+ 과제 2 : boardSave 라는 명칭으로 scripts.js 에 게시물 업로드 함수 추가해서 BoardWrite 에서 호출하여 사용
  */
 
 
-const Write = () => {
+const BoardWrite = () => {
     // form 데이터 내부 초기값
     // 작성자 -> 나중에 로그인한 아이디로 박제 변경불가하게
     // react-router-dom 에 존재하는 path 주소 변경 기능 사용
     const navigate = useNavigate();
+    const {user, isAuthenticated, logoutFn} = useAuth();
     const [formData, setFormData] = useState({
         title:'',
         content:'',
         writer:'',
     })
 
-    const handleSubmit = (e)  => {
-        e.preventDefault(); //제출 일시 중지
-        axios.post("http://localhost:8085/api/board", formData);
-        alert("글이 작성되었습니다.");
-        navigate('/board'); // 게시물 목록 페이지 이동
-    }
+    // const handleSubmit = (e)  => {
+    //     e.preventDefault(); //제출 일시 중지
+    //     axios.post("http://localhost:8085/api/board", formData);
+    //     alert("글이 작성되었습니다.");
+    //     navigate('/board'); // 게시물 목록 페이지 이동
+    // }
 
     const handleChange = (e) =>{
         const {name, value} = e.target;
@@ -41,19 +45,24 @@ const Write = () => {
     return(
         <div className="page-container">
             <h1>글쓰기</h1>
-            <form onSubmit={handleSubmit}>
+            {/*<form onSubmit={handleSubmit}>*/}
+            <form onSubmit={boardSave}>
                 <label>작성자 :
-                    <input type="text"
-                           id="writer"
-                           name="writer"
-                           value={formData.writer}
-                           onChange={handleChange}
-                           placeholder="작성자를 입력하세요."
-                           maxLength={50}
-                           required
-                    />
+                    <span>
+                        &nbsp;&nbsp;
+                        {user.memberName}
+                    </span>
+                    {/*<input type="text"*/}
+                    {/*       id="writer"*/}
+                    {/*       name="writer"*/}
+                    {/*       value={formData.writer}*/}
+                    {/*       onChange={handleChange}*/}
+                    {/*       placeholder="작성자를 입력하세요."*/}
+                    {/*       maxLength={50}*/}
+                    {/*       required*/}
+                    {/*/>*/}
                 </label>
-                <label>제목 :
+                <label>제목 :&nbsp;&nbsp;&nbsp;
                     <input type="text"
                            id="title"
                            name="title"
@@ -64,7 +73,7 @@ const Write = () => {
                            required
                     />
                 </label>
-                <label>내용 :
+                <label>내용 :&nbsp;&nbsp;&nbsp;
                     <textarea
                         id="content"
                         name="content"
@@ -135,4 +144,4 @@ const 중괄호 = () => {
     )
 
 };
-export default Write;
+export default BoardWrite;
