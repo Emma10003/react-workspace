@@ -91,7 +91,13 @@ export const API_URLS = {
     PRODUCT : `${API_URL}/api/product`,
     EMAIL : `${API_URL}/api/email`
 }
-
+/**
+ *
+ * @param axios
+ * @param setProducts
+ * @param setLoading
+ * @returns {Promise<void>}
+ */
 export const fetchAllProducts = async (axios, setProducts, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.PRODUCT}/all`, {});
@@ -102,7 +108,15 @@ export const fetchAllProducts = async (axios, setProducts, setLoading=null) => {
         if(setLoading) setLoading(false);
     }
 }
-
+/**
+ *
+ * @param axios
+ * @param id
+ * @param setProduct
+ * @param navigate
+ * @param setLoading
+ * @returns {Promise<void>}
+ */
 export const fetchProductDetail = async (axios, id, setProduct, navigate, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.PRODUCT}/${id}`, {});
@@ -115,7 +129,13 @@ export const fetchProductDetail = async (axios, id, setProduct, navigate, setLoa
     }
 }
 
-// 상품 비활성화
+/**
+ *
+ * @param axios
+ * @param id
+ * @param navigate
+ * @returns {Promise<void>}
+ */
 export const deleteProduct = async (axios, id, navigate) => {
     try{
         const res = await axios.delete(`${API_URLS.PRODUCT}/${id}`);
@@ -126,6 +146,13 @@ export const deleteProduct = async (axios, id, navigate) => {
     }
 }
 
+/**
+ *
+ * @param axios
+ * @param setBoards
+ * @param setLoading
+ * @returns {Promise<void>}
+ */
 export const fetchAllBoards = async (axios, setBoards, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.BOARD}/all`, {});
@@ -137,6 +164,14 @@ export const fetchAllBoards = async (axios, setBoards, setLoading=null) => {
     }
 }
 
+/**
+ *
+ * @param axios
+ * @param setBoard
+ * @param limit
+ * @param setLoading
+ * @returns {Promise<void>}
+ */
 export const fetchAllPopularBoards = async (axios, setBoard, limit=6, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.BOARD}/popular`, {});
@@ -148,6 +183,15 @@ export const fetchAllPopularBoards = async (axios, setBoard, limit=6, setLoading
     }
 }
 
+/**
+ *
+ * @param axios
+ * @param id
+ * @param setBoard
+ * @param navigate
+ * @param setLoading
+ * @returns {Promise<void>}
+ */
 export const fetchBoardDetail = async (axios, id, setBoard, navigate, setLoading=null) => {
     try{
         const res = await axios.get(`${API_URLS.BOARD}/${id}`, {});
@@ -160,18 +204,32 @@ export const fetchBoardDetail = async (axios, id, setBoard, navigate, setLoading
     }
 }
 
-export const boardSave = async (axios, navigate, formData) => {
+/**
+ *
+ * @param axios
+ * @param navigate
+ * @param formData
+ * @returns {Promise<void>}
+ */
+export const boardSave = async (axios, formData, navigate) => {
     try{
         const res = await axios.post(`${API_URLS.BOARD}`, formData);
-        alert("글이 작성되었습니다.");
+        alert("글이 성공적으로 작성되었습니다.");
         navigate("/board");
+        return res;
     } catch (error) {
-        alert("게시글 작성 페이지에 접근이 불가합니다.");
-        navigate("/board");
+        alert("게시글 작성 중 문제가 발생했습니다.");
+        console.error(error);
+        throw error;
     }
 }
 
 // ==================[ 날짜 포맷팅 관련 함수 ]==================
+/**
+ *
+ * @param dateString
+ * @returns {string}
+ */
 export const formatDate = (dateString) => {
     if(!dateString) return '-';
     const date = new Date(dateString);
@@ -183,6 +241,11 @@ export const formatDate = (dateString) => {
 }
 
 // ==================[ 가격 포맷팅 관련 함수 ]==================
+/**
+ *
+ * @param price
+ * @returns {string}
+ */
 export const formatPrice = (price) => {
     return new Intl.NumberFormat("ko-KR").format(price);
 }

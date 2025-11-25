@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {fetchBoardDetail, goToPage, renderLoading} from "../context/scripts";
-import {render} from  "@testing-library/react";
+import {render} from "@testing-library/react";
 
 const BoardDetail = () => {
     const {id} = useParams(); //URL 에서 id 가져오기
@@ -15,9 +15,9 @@ const BoardDetail = () => {
     }, [id]);
 
     // 로딩중 일 때
-    if(loading) return renderLoading("게시물을 불러오는 중");
+    if (loading) return renderLoading("게시물을 불러오는 중");
     // 게시물을 찾을 수 없는 경우
-    if(!board) {
+    if (!board) {
         renderLoading("게시물을 찾을 수 없습니다.");
         goToPage(navigate, "/board");
     }
@@ -33,7 +33,7 @@ const BoardDetail = () => {
             <div className="board-detail-content">
                 {board.content}
             </div>
-            <button className="button" onClick={ () => goToPage(navigate, '/board')}>
+            <button className="button" onClick={() => goToPage(navigate, '/board')}>
                 목록으로
             </button>
         </div>

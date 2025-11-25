@@ -42,8 +42,8 @@ const Main = () => {
     // 5월 11일 -> 05월 11일 형태로 자리수를 맞춰 표기
     const today = new Date();
     const formattedDate = `${today.getFullYear()}년
-                ${String(today.getMonth() + 1).padStart(2,'0')}월
-                ${String(today.getDate()).padStart(2,'0')}일`;
+                ${String(today.getMonth() + 1).padStart(2, '0')}월
+                ${String(today.getDate()).padStart(2, '0')}일`;
 
     // 가격 포맷팅
     const formatPrice = (price) => {
@@ -63,7 +63,7 @@ const Main = () => {
         navigate(`/product/${productId}`);
     }
 
-    return(
+    return (
         <div className="page-container">
             <h1>메인 페이지</h1>
             <p className="main-date">{formattedDate}</p>
@@ -90,7 +90,7 @@ const Main = () => {
                             </li>
                         ))}
                     </ul>
-                ): (
+                ) : (
                     <p className="no-data">제품이 없습니다.</p>
                 )}
             </section>
@@ -106,17 +106,19 @@ const Main = () => {
                 {products.length > 0 ? (
                     <ul className="main-product-grid">
                         {products.map((p) => (
-                            <li key={p.id} className="main-product-card"
+                            <li
+                                key={p.id}
+                                className="main-product-card"
                                 onClick={() => handleProductClick(p.id)}>
                                 <div className="main-product-image">
                                     {p.imageUrl ? (
                                         <img src={p.imageUrl} alt={p.productName}
                                              onError={(e) => {
-                                                 e.target.onerror=null;
-                                                 e.target.src="상품이 존재하지 않을 경우 기본 이미지 url 작성"
+                                                 e.target.onerror = null;
+                                                 e.target.src = "상품이 존재하지 않을 경우 기본 이미지 url 작성"
                                              }}
                                         />
-                                    ): (
+                                    ) : (
                                         <div className="no-image">
                                             <img src="/static/img/default.png" alt="기본 이미지"/>
                                         </div>
@@ -125,7 +127,7 @@ const Main = () => {
                             </li>
                         ))}
                     </ul>
-                ): (
+                ) : (
                     <p className="no-data">인기글이 없습니다.</p>
                 )}
             </section>
