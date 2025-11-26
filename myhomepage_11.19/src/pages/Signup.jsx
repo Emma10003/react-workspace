@@ -2,6 +2,7 @@
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {clear} from "@testing-library/user-event/dist/clear";
+import {handleInputChange} from "../context/scripts";
 
 const Signup = () => {
 
@@ -223,6 +224,7 @@ const Signup = () => {
             memberEmail:formData.memberEmail,
             memberPassword:formData.memberPw,
         }
+
         const res = await axios.post("/api/auth/signup",signupData);
         if(res.data === "success" || res.status === 200) {
             console.log("res.data   : ",res.data);
@@ -254,6 +256,7 @@ const Signup = () => {
          */
     }
 
+/*
     const handleChange = (e) =>{
         const {name, value} = e.target;
         setFormData(p => ({
@@ -267,6 +270,14 @@ const Signup = () => {
 
         }))
     }
+*/
+
+    const handleChange = (e) => {
+        // const {name, value} = e.target;
+        handleInputChange(e, setFormData);
+        // 개발자가 원하는 정규식이나, 입력형식에 일치하게 작성했는지 체크!
+    }
+
     return(
         <div className="page-container">
 

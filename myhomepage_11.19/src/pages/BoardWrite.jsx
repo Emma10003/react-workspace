@@ -2,7 +2,7 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {NavLink, useNavigate} from "react-router-dom";
-import {boardSave} from "../context/scripts";
+import {boardSave, handleInputChange} from "../context/scripts";
 import {useAuth} from "../context/AuthContext";
 
 /*
@@ -53,10 +53,8 @@ const BoardWrite = () => {
     };
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setFormData(p => ({
-            ...p, [name]: value
-        }))
+        // const {name, value} = e.target;
+        handleInputChange(e, setFormData);
     }
 
     // ok를 할 경우 게시물 목록으로 돌려보내기   기능이 하나이기 때문에 if 다음 navigate 는 {} 생략 후 작성

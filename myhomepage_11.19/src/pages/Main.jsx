@@ -80,7 +80,8 @@ const Main = () => {
                 {boards.length > 0 ? (
                     <ul className="board-list">
                         {boards.map((board) => (
-                            <li key={board.id} className="board-item"
+                            <li key={board.id}
+                                className="board-item"
                                 onClick={() => handleIDClick(board.id)}>
                                 <span className="board-title">{board.title}</span>
                                 <div className="board-meta">

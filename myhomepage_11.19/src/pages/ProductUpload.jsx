@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import axios from "axios";
+import {handleInputChange} from "../context/scripts";
 
 
 const ProductUpload = () => {
@@ -24,11 +25,12 @@ const ProductUpload = () => {
     ]
 
     // 입력값 변경 핸들러
+    // 기존 변수명은 모두 setFormData 사용
+    // 여기에서는 setProduct 변수명 사용
+    // 제품 업로드를 했을 때 제품이 무사히 업로드되는지 확인!
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setProduct(p => ({
-            ...p, [name]: value,
-        }));
+        handleInputChange(e, setProduct);
 
         // 입력 시 해당 필드의 에러 메세지 제거
         if(errors[name]) {
@@ -36,7 +38,7 @@ const ProductUpload = () => {
                 ...p, [name]: ''
             }));
         }
-    };
+    }
 
     // 폼 유효성 검사
     // const validateForm = () => {
