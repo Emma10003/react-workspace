@@ -1,7 +1,8 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {fetchAllProducts, formatPrice, goToPage, renderNoData} from "../context/scripts";
+import {formatPrice, goToPage, renderNoData} from "../service/commonService";
+import {fetchAllProducts} from "../service/APIService";
 
 // ctrl + alt + L  :  코드 정렬 단축키
 const Products = () => {

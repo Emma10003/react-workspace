@@ -7,9 +7,11 @@
 // 로그인에 관련된 모든 기능 관리
 import {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
+import {API_URLS} from "../service/APIService";
+import {fetchLoginCheck} from "../service/APIService";
 
 // 0. 공통 URL 상수이름 형태로 데이터를 작성 후 변수이름으로 상태관리
-const API_AUTH_URL = "http://localhost:8085/api/auth";
+const API_AUTH_URL = API_URLS.AUTH;
 
 
 // 1. context 생성
@@ -27,25 +29,13 @@ const AuthProvider = ({children}) => {
 
     // 4. 페이지 로드 시 로그인 상태 확인
     useEffect(() => {
-        checkLoginStatus();
+        // checkLoginStatus();
+        // 방법 2. APIService.js 에서 작성한 후 import해 코드 재활용
+        fetchLoginCheck(axios, setUser, setLoading);
     }, []);
 
-    const checkLoginStatus = () => {
-        // 로그인 상태 확인 함수 기능 만들기
-        axios.get(API_AUTH_URL + "/check", {
-            withCredentials: true
-        })
-            .then(res => {
-                // console.log("로그인 상태 확인 응답 : ", res.data);
-
-                setUser(res.data.user);
-            })
-            .catch(err => {
-                // console.log("로그인 상태 확인 오류 : ",err);
-                setUser(null);
-            })
-            .finally(() => setLoading(false))
-    }
+    // 방법 1. AuthContext.js 에서 직접 기능 작성
+    // const checkLoginStatus = () => {}
 
     const loginFn = (memberEmail, memberPassword) => {
         return axios.post(API_AUTH_URL + '/login',

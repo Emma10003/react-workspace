@@ -2,7 +2,8 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {NavLink, useNavigate} from "react-router-dom";
-import {boardSave, handleInputChange} from "../context/scripts";
+import {handleInputChange} from "../service/commonService";
+import {boardSave} from "../service/APIService";
 import {useAuth} from "../context/AuthContext";
 
 /*

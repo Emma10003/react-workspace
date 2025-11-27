@@ -1,7 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {deleteProduct, fetchProductDetail, formatDate, formatPrice, renderLoading} from "../context/scripts";
+import {formatDate, formatPrice, renderLoading} from "../service/commonService";
+import {deleteProduct, fetchProductDetail} from "../service/APIService";
 
 const ProductDetail = () => {
     const {id} = useParams(); //URL 에서 id 가져오기

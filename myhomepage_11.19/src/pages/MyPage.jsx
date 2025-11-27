@@ -10,7 +10,7 @@
 import AuthContext, {useAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import {renderLoading} from "../context/scripts";
+import {renderLoading} from "../service/commonService";
 
 const MyPage = () => {
     const navigate = useNavigate();
