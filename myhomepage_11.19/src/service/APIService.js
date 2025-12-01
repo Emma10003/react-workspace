@@ -41,7 +41,11 @@ export const fetchSignup = async (axios, formData) => {
     }
 
     try {
-        const res = await axios.post(`${API_URLS.AUTH}/signup`, signupData);
+        const res = await axios.post(`${API_URLS.AUTH}/signup`, signupData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         if(res.data === "success" || res.status === 200) {
             console.log("res.data   : ",res.data);
             console.log("res.status : ",res.status);
@@ -90,8 +94,8 @@ export const fetchMypageEdit = async (axios, formData, navigate, setIsSubmitting
     }
 
     try {
-        const res = await axios.post(`${API_URLS.AUTH}/update`, updateData);
-        if (res.data === "success" || res.status === 200) {
+        const res = await axios.put(`${API_URLS.AUTH}/update`, updateData);
+        if (res.data.success === true) {
             alert("회원 정보가 수정되었습니다.");
         } else if (res.data === 'wrongPassword') {
             alert("현재 비밀번호가 일치하지 않습니다.");
@@ -118,16 +122,14 @@ export const fetchMypageEditWithProfile = async (axios, formData, profileFile, n
     }
 
     try {
-        const res = await axios.post(`${API_URLS.AUTH}/update`, updateData, {
+        const res = await axios.put(`${API_URLS.AUTH}/update`, updateData, {
             headers: {
                 'Content-Type':'multipart/form-data'
             },
             withCredentials: true
         });
-        if (res.data === "success" || res.status === 200) {
+        if (res.data.success === true) {
             alert("회원 정보가 수정되었습니다.");
-        } else if (res.data === 'wrongPassword') {
-            alert("현재 비밀번호가 일치하지 않습니다.");
         } else {
             alert("회원정보 수정에 실패했습니다.");
         }
@@ -144,7 +146,7 @@ export const getProfileImageUrl = (user) => {
     // memberProfileImage 가 전체 URL 인 경우
     if(user.memberProfileImage.startsWith('http')) return user.memberProfileImage;
 
-    if(user.memberProfileImage.startsWith('/profile_images')) {
+    if(user.memberProfileImage.startsWith('/profile_images/')) {
         return `${API_URL}${user.memberProfileImage}`;
     }
 
