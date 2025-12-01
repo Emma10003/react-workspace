@@ -1,8 +1,11 @@
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import axios from "axios";
 import {handleInputChange} from "../service/commonService";
 
+
+// 상품 이미지 업로드 변경
+// profileImage -> imageUrl 을 이용해서 상품 업로드 시 제품 미리보기
 
 const ProductUpload = () => {
     const navigate = useNavigate();
@@ -17,6 +20,12 @@ const ProductUpload = () => {
         manufacturer: '',
         imageUrl: ''
     });
+
+    const fileInputRef = useRef(null);
+    const [productImage, setProductImage] = useState(product?.imageUrl || '/static/img/default.png');
+    const [productFile, setProductFile] = useState(null);
+    const [isUploading, setUploading] = useState(false);
+
 
     const [errors, setErrors] = useState({});
 
@@ -83,6 +92,66 @@ const ProductUpload = () => {
     const handleCancel = () => {
         if(window.confirm("작성 중인 내용이 사라집니다. 작성을 취소하시겠습니까?")) {
             navigate("/");
+        }
+    }
+
+
+    // 상품 사진 클릭 시 파일 선택
+    const handleProductImageClick = () => {
+        fileInputRef.current?.click();
+    }
+
+    // 이미지 변경
+    const handleProductImageChangee = async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+
+        // 이미지 파일인지 확인, 이미지 파일이 아닌 경우
+        if(!file.type.startsWith("image/")) {
+            alert("이미지 파일만 업로드 가능합니다.");
+            return;
+        }
+
+        // 파일 용량 확인 (최대 5MB)
+        if(file.size > 5 * 1024 * 1024) {
+            alert("파일 크기는 5MB를 초과할 수 없습니다.");
+            return;
+        }
+
+        // 미리보기 표시
+        const reader = new FileReader();
+        reader.onloadend= (e) => {
+            setProductImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        // 파일 저장
+        setProductFile(file);
+        await uploadProductImage(file)
+    }
+
+    // 이미지 업로드 (서버에 이미지 저장)
+    const uploadProductImage = async (file) => {
+        setUploading(true);  // 업로드 중으로 상태 변경
+        try {
+            const formData = new FormData();  // endpoint 로 전달할 키-값 데이터 감싸는 용도
+            formData.append("file", file);
+            formData.append("productCode", product.productCode);
+            const res = await axios.post("/api/product/product-image", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if(res.data.success === true) {
+                alert("프로필 이미지가 업데이트 되었습니다.");
+                setProductImage(res.data.imageUrl);
+            }
+        } catch(error) {
+            alert(error);
+            setProductImage(product?.imageUrl || '/static/img/default.png');
+        } finally {
+            setUploading(false);
         }
     }
 

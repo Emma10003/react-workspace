@@ -5,6 +5,12 @@ import {clear} from "@testing-library/user-event/dist/clear";
 import {handleInputChange} from "../service/commonService";
 import {fetchSignup} from "../service/APIService";
 
+/* =====================================
+ 과제 1 : Mypage 에서 회원정보 수정 들어가지 않고 프로필 이미지 보여주기
+ 과제 2 : Mypage에서 수정하기 버튼을 눌렀을 때도 프로필 이미지 수정 반영 저장하기
+ 과제 3 : 회원가입 시 프로필 이미지 선택 여부 / 선택 안 할 경우 기본 이미지로 회원가입 되도록 설정
+===================================== */
+
 const Signup = () => {
 
     const [formData, setFormData] = useState({
