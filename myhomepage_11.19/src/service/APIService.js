@@ -10,6 +10,8 @@ export 를 제거한다.
  */
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 const API_URL = 'http://localhost:8085'
 export const API_URLS = {
     AUTH : `${API_URL}/api/auth`,
@@ -136,6 +138,19 @@ export const fetchMypageEditWithProfile = async (axios, formData, profileFile, n
     }
 }
 
+export const getProfileImageUrl = (user) => {
+    if(!user?.memberProfileImage) return 'public/static/img/profile/default_profile_image.svg';
+
+    // memberProfileImage 가 전체 URL 인 경우
+    if(user.memberProfileImage.startsWith('http')) return user.memberProfileImage;
+
+    if(user.memberProfileImage.startsWith('/profile_images')) {
+        return `${API_URL}${user.memberProfileImage}`;
+    }
+
+    // 파일명만 있는 경우
+    return `${API_URL}/${user.memberProfileImage}}`;
+}
 
 /* ===========================================================
                    제품 백엔드 관련 함수

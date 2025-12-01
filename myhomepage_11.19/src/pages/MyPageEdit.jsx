@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {useAuth} from "../context/AuthContext";
 import {handleInputChange} from "../service/commonService";
-import {fetchMypageEdit, fetchMypageEditWithProfile} from "../service/APIService";
+import {fetchMypageEdit, fetchMypageEditWithProfile, getProfileImageUrl} from "../service/APIService";
 import axios from "axios";
 import {upload} from "@testing-library/user-event/dist/upload";
 /*
@@ -10,15 +10,11 @@ import {upload} from "@testing-library/user-event/dist/upload";
 */
 const MyPageEdit = () => {
     const navigate = useNavigate();
-    const {user, isAuthenticated, updateUser} = useAuth();
+    const {user, isAuthenticated, updateUser, loading} = useAuth();
+    console.log("user: ", user);
     // 페이지 리랜더링이 될 때 현재 데이터를 그대로 유지하기위해 사용
     // 새로고침되어도 초기값으로 돌아가는 것이 아니라 현재 상태를 그대로 유지
     const fileInputRef = useRef(null);
-    useEffect(() => {
-        if(!isAuthenticated) {
-            navigate("/login");
-        }
-    },[]);
     const [formData, setFormData] = useState({
         memberName: '',
         memberEmail: '',
@@ -30,8 +26,7 @@ const MyPageEdit = () => {
         currentPassword: '',
         confirmPassword: '',
     })
-
-    const [profileImage, setProfileImage] = useState(user?.memberProfileImage ||'/static/img/profile/default_profile_image.svg');
+    const [profileImage, setProfileImage] = useState('');
     const [profileFile, setProfileFile] = useState(null);
     const [isUploading, setUploading] = useState(false);
     const [validation, setValidation] = useState({
@@ -44,8 +39,28 @@ const MyPageEdit = () => {
         newPassword: '',
         confirmPassword: '',
     })
-
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        // 로딩 상태가 종료되었고, 백엔드에서 로그인한 결과가 존재하지 않는 게 맞다면
+        if (!loading && !isAuthenticated) navigate("/login");
+    }, [loading, isAuthenticated, navigate]); // 로그인 여부가 바뀌었을 때나, 페이지 접근이 감지되었을 때
+
+    useEffect(() => {
+        if(user) {
+            setFormData(prev => ({
+                ...prev,
+                memberName: user.memberName || '',
+                memberEmail: user.memberEmail || '',
+                memberPhone: user.memberPhone || '',
+                memberAddress: user.memberAddress || '',
+            }));
+            // 프로필 이미지 설정
+            setProfileImage(getProfileImageUrl(user));
+        }
+    }, [user?.memberEmail]);  // user.memberEmail 이 변경될 때만 실행
+
+
 
 /*
  업로드, 업데이트와 같은 모든 사이트에서 활용하는 공통 기능
