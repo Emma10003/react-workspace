@@ -14,6 +14,7 @@ import ProductUpload from "./pages/ProductUpload";
 import ProductDetail from "./pages/ProductDetail";
 import Products from "./pages/Products";
 import MyPageEdit from "./pages/MyPageEdit";
+import ProductEdit from "./pages/ProductEdit";
 
 
 // 단순히 가져와서 적용할 때는 from 생략
@@ -82,6 +83,7 @@ function App() {
                 <Route path="/write" element={<BoardWrite />} />
                 <Route path="/products/" element={<Products />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/product/edit/:id" element={<ProductEdit />} />
                 <Route path="/product/upload" element={<ProductUpload />} />
 
             </Routes>
