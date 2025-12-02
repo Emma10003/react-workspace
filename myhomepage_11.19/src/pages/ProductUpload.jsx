@@ -7,7 +7,11 @@ import {upload} from "@testing-library/user-event/dist/upload";
 
 // 상품 이미지 업로드 변경
 // profileImage -> imageUrl 을 이용해서 상품 업로드 시 제품 미리보기
-/* 과제 1)  */
+/*
+ 과제 1) 상품 업로드 시 - isActive 를 선택하여 판매중 / 판매중지 중 선택하여 업로드 하도록 설정.
+ 과제 2) serviceImpl 에서 main.jpg 로 저장되는 것이 아니라,
+         main - 본래이름 형태로 저장되도록 코드 수정
+*/
 
 const ProductUpload = () => {
     const navigate = useNavigate();
@@ -20,7 +24,8 @@ const ProductUpload = () => {
         stockQuantity: '',
         description: '',
         manufacturer: '',
-        imageUrl: ''
+        imageUrl: '',
+        isActive: 'Y'  // 기본값으로 판매중
     });
 
     // formData 변수 생성
@@ -157,7 +162,7 @@ const ProductUpload = () => {
                 [JSON.stringify(productData)],
                 {type: 'application/json'}
             );
-            uploadFormdata('product', productBlob);
+            uploadFormdata.append('product', productBlob);
 
             // 이미지 파일이 있으면 추가
             if(imageFile){
@@ -167,7 +172,7 @@ const ProductUpload = () => {
             const r = await axios.post(
                 'http://localhost:8085/api/product', uploadFormdata, {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type' : 'multipart/form-data'
                     }
                 }
             );
@@ -286,6 +291,35 @@ const ProductUpload = () => {
                         {errors.stockQuantity && (
                             <span className="error">{errors.stockQuantity}</span>
                         )}
+                    </div>
+                    <div className="form-group">
+                        <label>판매 상태<span className="required">*</span> </label>
+                        <div className="radio-group">
+                            <label className="radio-label">
+                                <input
+                                    type="radio"
+                                    name="isActive"
+                                    value="Y"
+                                    checked={product.isActive === 'Y'}
+                                    onChange={handleChange}
+                                />
+                                <span>판매중</span>
+                            </label>
+
+                            <label className="radio-label">
+                                <input
+                                    type="radio"
+                                    name="isActive"
+                                    value="N"
+                                    checked={product.isActive === 'N'}
+                                    onChange={handleChange}
+                                />
+                                <span>판매중지</span>
+                            </label>
+                        </div>
+                        <small className="form-hint">
+                            판매중으로 설정하면 고객에게 노출됩니다.
+                        </small>
                     </div>
                     <div className="form-group">
                         <label htmlFor="manufacturer">

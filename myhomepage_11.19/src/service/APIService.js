@@ -177,6 +177,7 @@ export const fetchAllProducts = async (axios, setProducts, setLoading=null) => {
         if(setLoading) setLoading(false);
     }
 }
+
 /**
  * get: 제품 일부 데이터 가져오는 함수
  * @param axios fetch 향상된 기능으로, 백엔드 연결 시 사용
