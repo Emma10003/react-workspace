@@ -9,6 +9,7 @@ export const API_URLS 의 경우 외부/내부 어디서든 활용 가능하도�
 export 를 제거한다.
  */
 import axios from "axios";
+import signup from "../pages/Signup";
 
 axios.defaults.withCredentials = true;
 
@@ -24,7 +25,7 @@ export const API_URLS = {
                      유저 백엔드 관련 함수
 =========================================================== */
 // 회원가입
-export const fetchSignup = async (axios, formData) => {
+export const fetchSignup = async (axios, formData, profileImage) => {
     // 필수 항목 체크
     if(!formData.memberName) {
         alert('이름을 입력해주세요.')
@@ -40,15 +41,19 @@ export const fetchSignup = async (axios, formData) => {
         memberPassword:formData.memberPw,
     }
 
+    if(profileImage) {
+        signupData.append('profileImage', profileImage)
+    }
+
     try {
-        const res = await axios.post(`${API_URLS.AUTH}/signup`, signupData, {
+        const res = await axios.post(API_URLS.AUTH + "/signup", signupData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
         if(res.data === "success" || res.status === 200) {
-            console.log("res.data   : ",res.data);
-            console.log("res.status : ",res.status);
+            console.log("res.data   : ", res.data);
+            console.log("res.status : ", res.status);
             alert('회원가입이 완료되었습니다.');
             window.location.href="/";
         }  else if(res.data === "duplicate" )

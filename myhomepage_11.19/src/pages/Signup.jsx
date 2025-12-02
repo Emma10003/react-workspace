@@ -2,7 +2,7 @@
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {clear} from "@testing-library/user-event/dist/clear";
-import {handleInputChange} from "../service/commonService";
+import {handleChangeImage, handleInputChange} from "../service/commonService";
 import {fetchSignup} from "../service/APIService";
 
 /* =====================================
@@ -116,7 +116,7 @@ const Signup = () => {
         setTimer({min:4, sec:59, active:true});
         // 백엔드 응답 결과를 res 라는 변수이름에 담아두기
         const res =  await axios.post('/api/email/signup',
-            formData.memberEmail, // form 데이터에서 email 전달
+            {email: formData.memberEmail}, // form 데이터에서 email 전달
             {
                 headers: {'Content-Type': 'application/json'} // 글자형태로 전달설정
             }
@@ -135,7 +135,7 @@ const Signup = () => {
         // if(res.data == 1 && res.data != null){  -> 응답코드 1일 경우에만 인증되도록 수정
         if(res.data === 1){
             setMessage(prev => ({...prev, authKey: '05:00'}));
-            setTimer({min:4, sec:59, active: true});
+            // setTimer({min:4, sec:59, active: true});
             alert('인증번호가 발송되었습니다.');
         } else {
             alert('인증번호 발송 중 오류가 발생했습니다.');
@@ -154,11 +154,6 @@ const Signup = () => {
     const checkAuthKey = async () => {
         if(timer.min === 0 && timer.sec === 0) {
             alert("인증번호 입력 시간을 초과하였습니다.");
-            return;
-        }
-
-        if(formData.authKey.length === 0) {
-            alert("인증번호를 입력해주세요.")
             return;
         }
 
@@ -269,6 +264,7 @@ const Signup = () => {
         // 개발자가 원하는 정규식이나, 입력형식에 일치하게 작성했는지 체크!
     }
 
+
     const handleProfileImageChange = (e) => {
         // e.target.value = html 내부에 클라이언트가 작성하거나 선택한 text 글자 형태의 값을 js로 가져와서 사용
         // 맨 첫 번째 파일은 index 0번부터 저장.
@@ -276,12 +272,12 @@ const Signup = () => {
         const html에서가져온이미지파일 = e.target.files[0];
         if(html에서가져온이미지파일) {
             // 파일 유효성 검사
-            if(!html에서가져온이미지파일.startsWith("image/")) {  // image 확장자로 되어 있는 파일이 아니라면
+            if(!html에서가져온이미지파일.type.startsWith("image/")) {  // image 확장자로 되어 있는 파일이 아니라면
                 alert("이미지 파일만 업로드 가능합니다.");
                 return;  // 저장되지 못하도록 돌려보내기
             }
 
-            if(html에서가져온이미지파일.size() > 5 * 1024 * 1024) {
+            if(html에서가져온이미지파일.size > 5 * 1024 * 1024) {
                 alert("파일 크기는 5MB를 초과할 수 없습니다.");
                 return;
             }
@@ -307,31 +303,35 @@ const Signup = () => {
         <div className="page-container">
 
             <form onSubmit={handleSubmit}>
-                <div className="profile-image-container">
+                <div className="profile-image-section">
                     <label htmlFor="memberProfile">
                         프로필 이미지
                     </label>
-                    <img src={profilePreview}
-                         alt="프로필 미리보기"
-                         className="profile-image"
-                    />
-                    <div className="profile-image-overlay">이미지 선택</div>
-                    <input type="file"
-                           accept="image/*"
-                           onChange={handleProfileImageChange}
-                           id="memberProfile"
-                           name="memberProfile"
-                           ref={fileInputRef}
-                    />
-                    {profileImage && (
-                        <button type="button"
-                                className="btn-reset"
-                                onClick={handleRemoveProfileImage}
-                        > 이미지 제거 </button>
-                    )}
-                    <span className="form-hint">
-                        * 이미지를 선택하지 않으면 기본 프로필 이미지가 설정됩니다.
-                    </span>
+                    <div className="profile-image-container"
+                         onClick={() => fileInputRef.current?.click()}
+                    >
+                        <img src={profilePreview}
+                             alt="프로필 미리보기"
+                             className="profile-image"
+                        />
+                        <div className="profile-image-overlay">이미지 선택</div>
+                        <input type="file"
+                               accept="image/*"
+                               onChange={handleProfileImageChange}
+                               id="memberProfile"
+                               name="memberProfile"
+                               ref={fileInputRef}
+                        />
+                        {profileImage && (
+                            <button type="button"
+                                    className="btn-reset"
+                                    onClick={handleRemoveProfileImage}
+                            > 이미지 제거 </button>
+                        )}
+                        <span className="form-hint">
+                            * 이미지를 선택하지 않으면 기본 프로필 이미지가 설정됩니다.
+                        </span>
+                    </div>
                 </div>
 
                 <label htmlFor="memberEmail">

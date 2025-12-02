@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {useAuth} from "../context/AuthContext";
-import {handleInputChange} from "../service/commonService";
+import {handleChangeImage, handleInputChange} from "../service/commonService";
 import {fetchMypageEdit, fetchMypageEditWithProfile, getProfileImageUrl} from "../service/APIService";
 import axios from "axios";
 import {upload} from "@testing-library/user-event/dist/upload";
@@ -143,6 +143,7 @@ const MyPageEdit = () => {
 
         }
         fetchMypageEdit(axios, formData, navigate, setIsSubmitting);
+        navigate("/mypage");
         // fetchMypageEditWithProfile(axios, formData, profileFile, navigate, setIsSubmitting);
     }
     const handleAddressSearch = () => {
@@ -189,7 +190,9 @@ const MyPageEdit = () => {
         // 새로고침하여, 프로필이미지 초기화 되는 것이 아니라, 현재상태를 유지한 채로 클릭을 진행한다.
     }
     // 프로필 이미지 파일 선택
+    /*
     const handleProfileChange = async  (e) => {
+
         const file = e.target.files[0];
         if(!file) return;
 
@@ -215,7 +218,9 @@ const MyPageEdit = () => {
         setProfileFile(file);
         console.log("프론트엔드에서 보낸 file: ", file);
         await  uploadProfileImage(file);
+
     }
+     */
 
     const uploadProfileImage = async (file) => {
         setUploading(true);
@@ -277,7 +282,7 @@ const MyPageEdit = () => {
                         </div>
                     </div>
                     <input type="file" ref={fileInputRef}
-                           onChange={handleProfileChange}
+                           onChange={handleChangeImage(setProfileImage, setProfileFile, setFormData)}
                            accept="image/*"
                            style={{ display: 'none' }}
                            multiple
