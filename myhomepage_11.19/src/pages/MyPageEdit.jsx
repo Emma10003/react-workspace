@@ -121,7 +121,7 @@ const MyPageEdit = () => {
         }
 
     }
-    const handleSubmit = (e, file) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         // 단순히 값이 존재하는지 확인 값이 존재하면 okokokokookokok!!!!!!!
@@ -144,11 +144,11 @@ const MyPageEdit = () => {
         }
         fetchMypageEdit(axios, formData, navigate, setIsSubmitting);
         // fetchMypageEditWithProfile(axios, formData, profileFile, navigate, setIsSubmitting);
-        navigate("/mypage");
+        // navigate("/mypage");
 
         // 추가
         // handleProfileChange(e);
-        console.log("handleSubmit - file : ", file);
+        // console.log("handleSubmit - file : ", file);
     }
     const handleAddressSearch = () => {
         new window.daum.Postcode({
@@ -256,8 +256,6 @@ const MyPageEdit = () => {
                     })
                 }
                 */
-            } else {
-                alert("오류가 발생했습니다.");
             }
         }catch (error) {
             alert(error);
@@ -395,8 +393,8 @@ const MyPageEdit = () => {
                                onChange={handleCheckChange}
                                required />
                     </div>
-                </label>
 
+                </label>
                 <div className="form-buttons">
                     <button className="btn-submit" disabled={isSubmitting}>
                         {isSubmitting ? '수정 중...' : '수정 완료'}

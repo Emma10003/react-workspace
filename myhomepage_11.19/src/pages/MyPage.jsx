@@ -52,7 +52,7 @@ const MyPage = () => {
                         <div className="info-item">
                             <span className="info-label">프로필 사진</span>
                             {/* 이미지 경로는 존재하지만, 해당 경로에 이미지가 존재하지 않을 경우 */}
-                            <img src={getProfileImageUrl(user) ||'/static/img/profile/default-profile.svg'}/>
+                            <img src={getProfileImageUrl(user) ||'/static/img/profile/default_profile_image.svg'}/>
                         </div>
 
                         <div className="info-item">
