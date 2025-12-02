@@ -144,11 +144,6 @@ const MyPageEdit = () => {
         }
         fetchMypageEdit(axios, formData, navigate, setIsSubmitting);
         // fetchMypageEditWithProfile(axios, formData, profileFile, navigate, setIsSubmitting);
-        // navigate("/mypage");
-
-        // 추가
-        // handleProfileChange(e);
-        // console.log("handleSubmit - file : ", file);
     }
     const handleAddressSearch = () => {
         new window.daum.Postcode({
@@ -239,7 +234,7 @@ const MyPageEdit = () => {
                 setProfileImage(res.data.imageUrl);
 
                 // 세션에서 최신 사용자 정보 가져오기
-                const sessionRes = await axios.get("api/auth/check", {
+                const sessionRes = await axios.get("/api/auth/check", {
                     withCredentials: true
                 })
 
