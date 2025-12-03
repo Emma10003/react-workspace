@@ -30,6 +30,18 @@ const ProductEdit = () => {
         isActive: 'Y'
     });
 
+    const [formData, setFormData] = useState({
+        productName: '',
+        productCode: '',
+        category: '',
+        price: '',
+        stockQuantity: '',
+        description: '',
+        manufacturer: '',
+        imageUrl: '',
+        isActive: 'Y'
+    });
+
     const [imageFile, setImageFile] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
     const [errors, setErrors] = useState({});
@@ -50,6 +62,60 @@ const ProductEdit = () => {
 
     const handleImageClick = () => {
         fileInputRef.current?.click();
+    }
+
+    /**
+     * TODO : 폼 제출
+     * 0. 제출 일시정지 / 유효성 검사
+     * 1. 변경된 데이터를 가져온다.
+     * 2. 백엔드에 데이터를 어떻게 전달할지 결정한다. -> PUT
+     * 3. 백엔드에서 @RequestPart 라면 Product 객체와 이미지 파일을 분리한 후, Product 객체는 json -> 문자열 형태로,
+     * 4. 이미지는 Multipart 로 전달한다.
+     * 5. axios put/patch 를 이용해서 백엔드 Mapping 과 연동한다.
+     */
+    const handleSubmit = async (e) => {
+        // 0. 제출 일시정지
+        e.preventDefault();
+        try {
+        // 1. 변경된 데이터를 가져온다.
+            const uploadFormData = new FormData();
+
+            // 3. Product 객체와 이미지 파일을 분리 (@RequestPart)
+            const {imageUrl, ...updateProductData} = product;
+            // Product 객체는 json으로 전달
+            const updateBlob = new Blob(
+                [JSON.stringify(updateProductData)],
+                {type:"application/json"}
+            );
+            uploadFormData.append("product", updateBlob);
+
+            // 4. 이미지는 Multipart로 전달
+            if(imageUrl) {
+                uploadFormData.append("imageUrl", imageUrl);
+            }
+
+            // 5. axios put 을 이용해서 백엔드와 연동
+            const r = await axios.put(
+                // 5-1. 백엔드 연결 주소
+                // 5-2. 어떤 데이터를 전달할 것인가
+                // 5-3. 헤더
+                `http://localhost:8085/api/product/${id}`, uploadFormData, {
+                    headers: {"Content-Type": "multipart/form-data"}
+                });
+
+            // 5-4. 백엔드에서 응답 오기 성공한 후, 긍정 답변
+            if (r.data.success) {
+                alert(r.data.message);
+                navigate(`/product/${id}`);
+            } else {
+                // 5-5. 백엔드에서 응답 오기 성공한 후, 부정적 답변
+                alert(r.data.message);
+            }
+        } catch (error) {
+            // 5-6. 백엔드에서 응답 받기 실패
+            alert("서버에 문제가 발생했습니다.");
+        }
+
     }
 
 
@@ -243,7 +309,9 @@ const ProductEdit = () => {
                         <button
                             type="submit"
                             className="btn-submit"
-                            disabled={loading}>
+                            disabled={loading}
+                            onClick={handleSubmit}
+                        >
                             {loading ? '수정 중...' : '수정 완료'}
                         </button>
                         <button

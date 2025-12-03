@@ -4,9 +4,6 @@
 
 
 // 기능을 나눌 때 여러 UI 태그에서 반복적으로 사용하는 기능인가? 확인
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
-import {useAuth} from "../context/AuthContext";
 
 /* ===========================================================
                         로딩 관련 함수

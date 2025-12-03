@@ -14,6 +14,7 @@ import signup from "../pages/Signup";
 axios.defaults.withCredentials = true;
 
 const API_URL = 'http://localhost:8085'
+
 export const API_URLS = {
     AUTH : `${API_URL}/api/auth`,
     BOARD : `${API_URL}/api/board`,
@@ -46,7 +47,7 @@ export const fetchSignup = async (axios, formData, profileImage) => {
     }
 
     try {
-        const res = await axios.post(API_URLS.AUTH + "/signup", signupData, {
+        const res = await axios.post(`${API_URLS.AUTH}/signup`, signupData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
