@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {fetchProductDetail} from "../service/APIService";
 import axios from "axios";
-import {handleChangeImage} from "../service/commonService";
+import {handleChangeImage, handleInputChange} from "../service/commonService";
 /*
  과제 3: 상품 정보 수정하기 -> 수정된 결과 반영하기
     check) 2. 메인 이미지 수정하고, 수정된 결과 미리보기
@@ -77,10 +77,12 @@ const ProductEdit = () => {
         // 0. 제출 일시정지
         e.preventDefault();
         try {
-        // 1. 변경된 데이터를 가져온다.
+        // 1. 변경된 데이터를 가져온다.`
             const uploadFormData = new FormData();
 
             // 3. Product 객체와 이미지 파일을 분리 (@RequestPart)
+            // 따로 제외하고 싶은 데이터의 변수명칭을 ... 형태가 나오기 전에 작성하여 제거한 후,
+            // 나머지 데이터를 전달할 때 사용하는 방법.
             const {imageUrl, ...updateProductData} = product;
             // Product 객체는 json으로 전달
             const updateBlob = new Blob(
@@ -91,7 +93,7 @@ const ProductEdit = () => {
 
             // 4. 이미지는 Multipart로 전달
             if(imageUrl) {
-                uploadFormData.append("imageUrl", imageUrl);
+                uploadFormData.append("imageFile", imageFile);
             }
 
             // 5. axios put 을 이용해서 백엔드와 연동
@@ -116,6 +118,10 @@ const ProductEdit = () => {
             alert("서버에 문제가 발생했습니다.");
         }
 
+    }
+
+    const handleChange = (e) => {
+        handleInputChange(e, setProduct);
     }
 
 
@@ -164,6 +170,7 @@ const ProductEdit = () => {
                             name="productName"
                             value={product.productName}
                             placeholder="상품명을 입력하세요."
+                            onChange={handleChange}
                             maxLength="200"
                         />
                         {errors.productName && (
@@ -196,7 +203,9 @@ const ProductEdit = () => {
                         <select
                             id="category"
                             name="category"
-                            value={product.category}>
+                            value={product.category}
+                            onChange={handleChange}
+                        >
                             <option value="">카테고리를 선택하세요.</option>
                             {categories.map(category => (
                                 <option key={category} value={category}>
@@ -220,6 +229,7 @@ const ProductEdit = () => {
                             name="price"
                             value={product.price}
                             placeholder="가격 (원)"
+                            onChange={handleChange}
                             min="0"
                         />
                         {errors.price && (
@@ -238,6 +248,7 @@ const ProductEdit = () => {
                             name="stockQuantity"
                             value={product.stockQuantity}
                             placeholder="재고 수량"
+                            onChange={handleChange}
                             min="0"
                         />
                         {errors.stockQuantity && (
@@ -256,6 +267,7 @@ const ProductEdit = () => {
                             name="manufacturer"
                             value={product.manufacturer}
                             placeholder="제조사 명을 입력하세요."
+                            onChange={handleChange}
                             maxLength="100"
                         />
                     </div>
@@ -271,6 +283,7 @@ const ProductEdit = () => {
                                     type="radio"
                                     name="isActive"
                                     value="Y"
+                                    onChange={handleChange}
                                     checked={product.isActive === 'Y'}
                                 />
                                 <span>판매중</span>
@@ -280,6 +293,7 @@ const ProductEdit = () => {
                                     type="radio"
                                     name="isActive"
                                     value="N"
+                                    onChange={handleChange}
                                     checked={product.isActive === 'N'}
                                 />
                                 <span>판매중지</span>
@@ -300,6 +314,7 @@ const ProductEdit = () => {
                             name="description"
                             value={product.description}
                             placeholder="상품에 대한 설명을 입력하세요"
+                            onChange={handleChange}
                             rows="5"
                         />
                     </div>
