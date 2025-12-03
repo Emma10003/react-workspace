@@ -47,7 +47,6 @@ const MyPage = () => {
             <div className="mypage-container">
                 <div className="mypage-section">
                     <h2>회원 정보</h2>
-
                     <div className="info-group">
                         <div className="info-item">
                             <span className="info-label">프로필 사진</span>

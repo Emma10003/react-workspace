@@ -142,6 +142,7 @@ export const handleChangeImage = (setPreviewImage, setImageFile, setProduct) => 
     // 가 기본적으로 전제된 속성임. -> multipart 를 작성하지 않아 input 에서 하나의 이미지만 가져온다 하더라도
     // 항시 [0]번째의 데이터를 가져온다. 로 작성해야 함!
     const html에서가져온이미지첫번째파일 = e.target.files[0];
+    console.log("✉️ imageFile: ", html에서가져온이미지첫번째파일);
 
     if(html에서가져온이미지첫번째파일) {
         if(!html에서가져온이미지첫번째파일.type.startsWith('image/')) {

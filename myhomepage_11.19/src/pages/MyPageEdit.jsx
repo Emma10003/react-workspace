@@ -190,7 +190,6 @@ const MyPageEdit = () => {
         // 새로고침하여, 프로필이미지 초기화 되는 것이 아니라, 현재상태를 유지한 채로 클릭을 진행한다.
     }
     // 프로필 이미지 파일 선택
-    /*
     const handleProfileChange = async  (e) => {
 
         const file = e.target.files[0];
@@ -220,7 +219,6 @@ const MyPageEdit = () => {
         await  uploadProfileImage(file);
 
     }
-     */
 
     const uploadProfileImage = async (file) => {
         setUploading(true);
@@ -260,7 +258,7 @@ const MyPageEdit = () => {
         }catch (error) {
             alert(error);
             // 실패 시 원래 이미지로 복구
-            setProfileImage(user?.memberProfileImage ||'/static/img/profile/default-profile.svg');
+            setProfileImage(user?.memberProfileImage ||'/static/img/default-profile.svg');
         } finally {
             setUploading(false);
         }
@@ -282,7 +280,7 @@ const MyPageEdit = () => {
                         </div>
                     </div>
                     <input type="file" ref={fileInputRef}
-                           onChange={handleChangeImage(setProfileImage, setProfileFile, setFormData)}
+                           onChange={handleProfileChange}
                            accept="image/*"
                            style={{ display: 'none' }}
                            multiple
