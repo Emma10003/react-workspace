@@ -41,9 +41,9 @@ const BoardWrite = () => {
     const [boardMainImagePreview, setBoardMainImagePreview] = useState(null);  // 이미지 미리보기 URL
 
     // 상세 이미지 관련 (최대 5장)
-    const detailImgsFileInputRef = useRef(null);
-    const [uploadedDetailBoardImageFiles, setUploadedDetailBoardImageFiles] = useState(null);  // 실제 DB에 업로드하고, 파일 폴더에 저장할 이미지 파일
-    const [boardDetailImagePreviews, setBoardDetailImagePreviews] = useState(null);  // 이미지 미리보기 URL
+    const 상세사진_새로고침해도_상태변화없도록_설정 = useRef(null);
+    const [상세사진_이름들, set상세사진_이름들] = useState(null);
+    const [상세사진들_미리보기, set상세사진들_미리보기] = useState([]);
 
     // js는 컴파일 형태가 아니기 때문에, 변수정의는 순차적으로 작업!!
     // user 를 먼저 호출하고 나서 user 관련된 데이터를 활용해야 함.
@@ -78,7 +78,7 @@ const BoardWrite = () => {
         const boardData = {
             title: board.title,
             content: board.content,
-            writer: user?.memberEmail || '',
+            writer: user?.memberEmail,
         };
 
         // 3. boardDataBlob
@@ -91,10 +91,18 @@ const BoardWrite = () => {
         boardUploadFormData.append("board", boardDataBlob);
         // 4. 이미지 파일이 있으면 board에 추가
         if(uploadedMainBoardImageFile) {
-            boardUploadFormData.append("imageFile", uploadedMainBoardImageFile);
+            boardUploadFormData.append("mainImage", uploadedMainBoardImageFile);  // 백엔드 Controller 파라미터와 이름 일치시킥4ㅣ
             // 여기의 imageFile 은 언제 상태변경이 이뤄지는거? -> commonService 의 handleChangeImage 에서 상태변경되어서 반환됨
             // => html에서 onChange(handleChangeImage(...))
         }
+        // 상세 이미지들 추가
+        if(상세사진_이름들 && 상세사진_이름들.length > 0) {
+            // forEach 는 향상된 for문으로, 배열[]에서 한 장씩 꺼내어 추가.
+            상세사진_이름들.forEach((사진한장씩) => {
+                boardUploadFormData.append("detailImage", 사진한장씩);
+            });
+        }
+
 
         // 5. 백엔드 API 호출
         await boardSave(axios, boardUploadFormData, navigate);
@@ -108,7 +116,7 @@ const BoardWrite = () => {
 
     // 상세 이미지 여러 장 변경 핸들러
     const handleDetailImagesChanges = (e) => {
-        const files = Array.form(e.taret.files);
+        const files = Array.from(e.target.files);
 
         // 최대 5장 까지만 허용
         if(files.length > 5) {
@@ -129,7 +137,7 @@ const BoardWrite = () => {
             }
         }
         // for문을 통해 모든 사진에 대한 검증이 종료되면, 상세이미지 파일에 파일명칭 저장
-        setUploadedDetailBoardImageFiles(files);
+        set상세사진_이름들(files);
 
         // 미리보기 생성
         const 미리보기할_상세사진들 = [];
@@ -144,7 +152,7 @@ const BoardWrite = () => {
                 // 모든 파일 로드 완료 시
                 if(사진개수 === files.length) {
                     // 미리보기 화면에서 보일 수 있도록 setter 를 이용하여 미리보기 변수에 저장
-                    setBoardDetailImagePreviews(미리보기할_상세사진들);
+                    set상세사진들_미리보기(미리보기할_상세사진들);
                 }
             };
             // 파일 하나씩 하나씩 미리보기 생성
@@ -188,18 +196,6 @@ const BoardWrite = () => {
                             />
                         </label>
 
-                        <label>내용 :&nbsp;&nbsp;&nbsp;
-                            <textarea
-                                id="content"
-                                name="content"
-                                value={board.content}
-                                onChange={handleChange}
-                                placeholder="내용을 입력하세요."
-                                rows={15}
-                                required
-                            />
-                        </label>
-
                         <div className="form-group">
                             <label htmlFor="imageUrl" className="btn-upload">
                                 게시물 이미지 추가하기
@@ -214,7 +210,7 @@ const BoardWrite = () => {
                                 style={{display: 'none'}}
                             />
                             <small className="form-hint">
-                                게시물 이미지를 업로드 하세요. (최대 5MB, 이미지 파일만 가능)
+                                &nbsp;게시물 이미지를 업로드 하세요. (최대 5MB, 이미지 파일만 가능)
                             </small>
 
                             {boardMainImagePreview && (
@@ -234,6 +230,53 @@ const BoardWrite = () => {
                                 </div>
                             )}
                         </div>
+
+                        {/* 상세 이미지 여러 장 업로드 & 미리보기 */}
+                        <div className="form-group">
+                            <label htmlFor="detailImages" className="btn-upload">
+                                상세 이미지 추가하기 (최대 5장)
+                            </label>
+                            <input type="file"
+                                   id="detailImages"
+                                   name="detailImages"
+                                   ref={상세사진_새로고침해도_상태변화없도록_설정}
+                                   onChange={handleDetailImagesChanges}
+                                   accept="image/*"
+                                   multiple
+                                   style={{display: 'none'}}
+                           />
+                            <small className="form-hint">
+                                &nbsp;상세 이미지를 업로드하세요. (최대 5개, 각5MB 이하)
+                            </small>
+
+                            {상세사진들_미리보기.length > 0 && (
+                                <div className="multiple-images-preview">
+                                    <p className="detail-images-selected-text">
+                                        선택된 이미지: {상세사진들_미리보기.length}개
+                                    </p>
+                                    {상세사진들_미리보기.map((image, index) => (
+                                        <div key={index} className="detail-image-item">
+                                            <img src={image}
+                                                 alt={`상세이미지 ${index + 1}`} />
+                                        </div>
+                                    ))}
+                                </div>
+
+                            )}
+                        </div>
+
+
+                        <label>내용 :&nbsp;&nbsp;&nbsp;
+                            <textarea
+                                id="content"
+                                name="content"
+                                value={board.content}
+                                onChange={handleChange}
+                                placeholder="내용을 입력하세요."
+                                rows={15}
+                                required
+                            />
+                        </label>
 
                         <div className="form-buttons">
                             <button type="submit"
